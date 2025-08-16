@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghép Ảnh Sản Phẩm SuBag</title>
+    <link rel="shortcut icon" href="favion.png">
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+</head>
+<body>
+
+    <header class="subag-header">
+        <div class="brand-identity">
+            <img src="logo_subag.png" alt="Logo SuBag" class="brand-logo">
+            <div class="brand-text">
+                <h1>SuBag</h1>
+                <p>Trà Sữa & Bánh</p>
+            </div>
+        </div>
+        <p class="header-slogan">Công cụ ghép ảnh sản phẩm ✨</p>
+    </header>
+
+    <main class="container">
+        <div class="input-section">
+            <label for="productInput" class="custom-file-upload">Tải ảnh sản phẩm</label>
+            <input type="file" id="productInput" accept="image/*" multiple>
+            <div id="product-gallery" class="hidden"></div>
+        </div>
+
+        <div id="editor-area" class="hidden">
+            <h2>Khu vực xem trước</h2>
+            
+            <canvas id="editor-canvas" width="500" height="500"></canvas>
+            
+            <div class="controls">
+                <label for="zoom-slider">🔍 Phóng to / Thu nhỏ</label>
+                <input type="range" id="zoom-slider" min="0.5" max="3" step="0.05" value="1">
+            </div>
+
+            <div class="navigation-controls">
+                <button id="prevBtn" class="nav-btn" title="Ảnh trước">‹</button>
+                <span id="image-counter"></span>
+                <button id="nextBtn" class="nav-btn" title="Ảnh kế tiếp">›</button>
+            </div>
+
+            <button id="processBtn">Tải ảnh này</button>
+            <button id="downloadAllBtn" class="secondary-btn">Tải tất cả</button>
+        </div>
+    </main>
+    
+    <a id="downloadLink" style="display: none;"></a>
+    
+    <button id="resetBtn" class="fab-btn" title="Làm lại từ đầu"><i class="fas fa-undo"></i></button>
+
+    <div id="custom-confirm-overlay" class="hidden">
+        <div id="custom-confirm-box">
+            <p class="confirm-message">Bạn có chắc chắn muốn xóa toàn bộ và bắt đầu lại từ đầu không?</p>
+            <div class="confirm-buttons">
+                <button id="confirm-yes-btn">Đồng ý</button>
+                <button id="confirm-no-btn">Hủy bỏ</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="subag-footer">
+        <div class="footer-content">
+            <p><strong>SuBag - Trà Sữa & Bánh</strong></p>
+            <div class="footer-contact-info">
+                <div class="footer-contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Hộ Phòng, Giá Rai, Bạc Liêu</span>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-phone-alt"></i>
+                    <span>0914 00 40 70</span>
+                </div>
+            </div>
+            <div class="social-links">
+                <a href="#" target="_blank" title="Facebook SuBag">Facebook</a>
+                <a href="#" target="_blank" title="Instagram SuBag">Instagram</a>
+            </div>
+            <p class="copyright">&copy; 2025 SuBag. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,453 @@
+/* --- Cài đặt chung & Sửa lỗi Mobile triệt để --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+}
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #fffafb; /* Màu nền hơi hồng rất nhạt */
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* --- Header SuBag (Thiết kế mới) --- */
+.subag-header {
+    width: 100%;
+    background-color: #FFFFFF; /* Nền trắng sạch sẽ */
+    padding: 10px 30px; /* Canh lề bên trong */
+    display: flex;
+    justify-content: space-between; /* Đẩy các phần tử ra 2 bên */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    border-bottom: 1px solid #FCE4EC; /* Viền hồng rất nhạt */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Đổ bóng nhẹ nhàng */
+}
+.subag-header .brand-identity {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Khoảng cách giữa logo và chữ */
+}
+.subag-header .brand-logo {
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
+}
+.subag-header .brand-text h1 {
+    font-size: 1.8em;
+    color: #D81B60;
+    margin: 0;
+    line-height: 1;
+}
+.subag-header .brand-text p {
+    margin: 0;
+    font-size: 0.9em;
+    color: #666;
+    font-weight: 500;
+}
+.subag-header .header-slogan {
+    font-size: 1em;
+    color: #888;
+    font-style: italic;
+}
+
+/* --- Responsive cho Header --- */
+@media (max-width: 650px) {
+    .subag-header {
+        justify-content: center; /* Canh giữa khi màn hình nhỏ */
+    }
+    .subag-header .header-slogan {
+        display: none; /* Ẩn slogan trên mobile cho gọn */
+    }
+}
+
+
+/* --- Container chính (ĐÃ SỬA LỖI RESPONSIVE) --- */
+main.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(216, 27, 96, 0.1);
+    
+    width: 100%; 
+    max-width: 700px;
+    
+    /* DÒNG QUAN TRỌNG NHẤT ĐỂ SỬA LỖI CO DÃN */
+    min-width: 0; 
+    
+    text-align: center;
+    margin: 30px auto;
+    flex: 1;
+}
+@media (max-width: 740px) { /* Mở rộng breakpoint để có khoảng hở sớm hơn */
+    main.container {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+@media (max-width: 480px) {
+    main.container {
+        margin: 0;
+        padding: 15px;
+        border-radius: 0;
+    }
+}
+
+h2 {
+    font-size: 1.5em; 
+    margin: 0 0 20px 0;
+    border-top: 1px solid #FCE4EC; 
+    padding-top: 20px;
+    color: #D81B60;
+}
+.hidden { 
+    display: none !important; 
+}
+
+/* --- Khu vực Input --- */
+.input-section { 
+    margin-bottom: 25px; 
+}
+input[type="file"] { 
+    display: none; 
+}
+.custom-file-upload {
+    display: block; 
+    background-color: #FCE4EC; 
+    color: #D81B60;
+    padding: 15px 20px; 
+    border-radius: 8px; 
+    cursor: pointer;
+    font-weight: 600; 
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+    border: 2px dashed #F48FB1;
+    margin-bottom: 15px;
+}
+.custom-file-upload:hover { 
+    background-color: #F8BBD0; 
+}
+
+/* --- Thư viện ảnh --- */
+#product-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #fff8e1;
+    border: 1px solid #ffecb3;
+}
+.gallery-item {
+    width: 80px; 
+    height: 80px;
+    border-radius: 8px; 
+    border: 3px solid transparent;
+    overflow: hidden; 
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+.gallery-item:hover { 
+    transform: scale(1.05);
+    border-color: #F48FB1;
+}
+.gallery-item.active { 
+    border-color: #D81B60;
+    transform: scale(1.05);
+}
+.gallery-item img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+.gallery-item .checkmark {
+    display: none; 
+    position: absolute; 
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px; 
+    color: white; 
+    background-color: rgba(40, 167, 69, 0.8);
+    width: 100%; 
+    height: 100%; 
+    line-height: 80px; 
+    text-align: center;
+    border-radius: 6px;
+}
+.gallery-item.completed { 
+    opacity: 0.6; 
+}
+.gallery-item.completed .checkmark { 
+    display: block; 
+}
+.remove-btn {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    background-color: rgba(216, 27, 96, 0.8);
+    color: white;
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+/* --- Khu vực chỉnh sửa --- */
+#editor-area {
+    margin-top: 25px; 
+    padding-top: 20px; 
+    border-top: 1px solid #FCE4EC;
+}
+#editor-canvas {
+    max-width: 100%; 
+    height: auto;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    border: 2px solid #F8BBD0;
+    cursor: grab;
+    display: block;
+     margin-left: auto;
+    margin-right: auto;
+}
+#editor-canvas:active { 
+    cursor: grabbing; 
+}
+.controls { 
+    margin-top: 20px; 
+}
+.controls label { 
+    display: block; 
+    margin-bottom: 10px; 
+    font-weight: 500; 
+}
+#zoom-slider { 
+    width: 100%; 
+    cursor: pointer; 
+}
+.navigation-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px auto;
+    max-width: 200px;
+}
+.nav-btn {
+    background-color: #FCE4EC;
+    color: #D81B60;
+    border: 1px solid #F8BBD0;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.nav-btn:hover {
+    background-color: #F48FB1;
+    color: white;
+}
+.nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+#image-counter {
+    font-weight: 600;
+    color: #555;
+}
+#processBtn {
+    background: #D81B60;
+    color: white; 
+    width: 100%; 
+    padding: 15px; 
+    font-size: 1.1em;
+    font-weight: bold; 
+    border: none; 
+    border-radius: 8px;
+    cursor: pointer; 
+    transition: background 0.3s ease; 
+    margin-top: 10px;
+}
+#processBtn:hover { 
+    background: #AD1457; 
+}
+.secondary-btn {
+    background: #795548; /* Màu nâu socola */
+    color: white; 
+    width: 100%; 
+    padding: 15px; 
+    font-size: 1.1em;
+    font-weight: bold; 
+    border: none; 
+    border-radius: 8px;
+    cursor: pointer; 
+    transition: background 0.3s ease; 
+    margin-top: 10px;
+}
+.secondary-btn:hover {
+    background: #5D4037;
+}
+.secondary-btn:disabled {
+    background: #9fa5aa;
+    cursor: not-allowed;
+}
+
+/* --- Nút Làm Lại Từ Đầu --- */
+.fab-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: #ffc107; /* Màu vàng amber */
+    color: #333;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    font-size: 16px; /* Chỉnh lại kích thước icon */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.fab-btn:hover {
+    background-color: #ffca28;
+    transform: scale(1.1);
+}
+
+/* --- Footer SuBag --- */
+footer.subag-footer {
+    width: 100%;
+    background-color: #4E342E; /* Màu nâu đậm */
+    color: #D7CCC8; /* Màu chữ be nhạt */
+    text-align: center;
+    padding: 20px;
+    font-size: 0.9em;
+    margin-top: auto; 
+}
+footer.subag-footer p {
+    margin: 5px 0;
+}
+/* CSS MỚI CHO ICON FOOTER */
+.footer-contact-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0;
+}
+.footer-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #FFEBEE;
+}
+.footer-contact-item i {
+    font-size: 1.1em;
+    color: #F48FB1;
+}
+footer.subag-footer .copyright {
+    margin-top: 15px;
+    font-size: 0.8em;
+    opacity: 0.7;
+}
+footer.subag-footer .social-links {
+    margin-top: 10px;
+}
+footer.subag-footer .social-links a {
+    color: #FFEBEE;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+footer.subag-footer .social-links a:hover {
+    color: #F48FB1;
+}
+
+/* --- HỘP THOẠI XÁC NHẬN TÙY CHỈNH (CSS MỚI) --- */
+#custom-confirm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+#custom-confirm-overlay:not(.hidden) {
+    opacity: 1;
+}
+#custom-confirm-box {
+    background-color: #fffafb;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    text-align: center;
+    max-width: 350px;
+    width: 90%;
+    border-top: 5px solid #D81B60;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+#custom-confirm-overlay:not(.hidden) #custom-confirm-box {
+    transform: scale(1);
+}
+.confirm-message {
+    font-size: 1.1em;
+    color: #333;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+.confirm-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+.confirm-buttons button {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+#confirm-yes-btn {
+    background-color: #D81B60;
+    color: white;
+}
+#confirm-yes-btn:hover {
+    background-color: #AD1457;
+}
+#confirm-no-btn {
+    background-color: #f1f1f1;
+    color: #555;
+    border: 1px solid #ddd;
+}
+#confirm-no-btn:hover {
+    background-color: #e7e7e7;
+}

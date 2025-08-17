@@ -234,11 +234,16 @@ input[type="file"] {
     display: block; 
     margin-bottom: 10px; 
     font-weight: 500; 
+    text-align: left; /* Căn trái cho các label */
 }
-#zoom-slider { 
+#zoom-slider, #watermarkZoomSlider { 
     width: 100%; 
     cursor: pointer; 
 }
+#watermark-controls {
+    margin-top: 15px;
+}
+
 .navigation-controls {
     display: flex;
     justify-content: space-between;
@@ -312,14 +317,14 @@ input[type="file"] {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     background-color: #ffc107; /* Màu vàng amber */
     color: #333;
     border: none;
     border-radius: 50%;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    font-size: 16px; /* Chỉnh lại kích thước icon */
+    font-size: 20px; /* Chỉnh lại kích thước icon */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -450,4 +455,72 @@ footer.subag-footer .social-links a:hover {
 }
 #confirm-no-btn:hover {
     background-color: #e7e7e7;
+}
+
+/* === CSS CHO CÔNG TẮC BẬT/TẮT (MỚI) === */
+.toggle-switch-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+.toggle-label {
+    font-weight: 500;
+    color: #333;
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+}
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+input:checked + .slider {
+    background-color: #D81B60;
+}
+input:focus + .slider {
+    box-shadow: 0 0 1px #D81B60;
+}
+input:checked + .slider:before {
+    transform: translateX(22px);
+}
+.slider.round {
+    border-radius: 28px;
+}
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* === ẨN NÚT TẢI TẤT CẢ TRÊN MOBILE (MỚI) === */
+@media (max-width: 768px) {
+    #downloadAllBtn {
+        display: none;
+    }
 }

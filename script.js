@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const STORAGE_KEY = 'subagEditorState';
     let frameImage = new Image();
     let watermarkImage = new Image();
-    let productItems = []; // Mỗi item giờ sẽ có đầy đủ các thuộc tính riêng
+    let productItems = [];
     let currentProductImage = new Image();
     let activeProductIndex = -1;
     
@@ -48,12 +48,10 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.removeItem(STORAGE_KEY);
             return;
         }
-        // Cập nhật trạng thái của ảnh đang active vào mảng productItems trước khi lưu
         if (activeProductIndex > -1 && productItems[activeProductIndex]) {
             const activeItem = productItems[activeProductIndex];
             activeItem.scale = scale;
             activeItem.offset = { ...offset };
-            // Lưu cả trạng thái watermark của ảnh đang active
             activeItem.watermarkScale = watermarkScale;
             activeItem.watermarkOffset = { ...watermarkOffset };
         }
@@ -64,14 +62,10 @@ document.addEventListener('DOMContentLoaded', function() {
             offset: item.offset,
             isFrameEnabled: item.isFrameEnabled,
             isWatermarkEnabled: item.isWatermarkEnabled,
-            watermarkScale: item.watermarkScale, // Lưu thông số watermark riêng
-            watermarkOffset: item.watermarkOffset // Lưu thông số watermark riêng
+            watermarkScale: item.watermarkScale,
+            watermarkOffset: item.watermarkOffset
         })));
-
-        const state = {
-            items: savableItems,
-            activeIndex: activeProductIndex,
-        };
+        const state = { items: savableItems, activeIndex: activeProductIndex };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
     
@@ -88,8 +82,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 offset: item.offset,
                 isFrameEnabled: item.isFrameEnabled !== undefined ? item.isFrameEnabled : true,
                 isWatermarkEnabled: item.isWatermarkEnabled !== undefined ? item.isWatermarkEnabled : false,
-                watermarkScale: item.watermarkScale !== undefined ? item.watermarkScale : 0.3, // Khôi phục với giá trị mặc định
-                watermarkOffset: item.watermarkOffset !== undefined ? item.watermarkOffset : { x: 0, y: 0 } // Khôi phục với giá trị mặc định
+                watermarkScale: item.watermarkScale !== undefined ? item.watermarkScale : 0.3,
+                watermarkOffset: item.watermarkOffset !== undefined ? item.watermarkOffset : { x: 0, y: 0 }
             }));
             activeProductIndex = savedState.activeIndex;
 
@@ -109,28 +103,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // === Main Functions ===
 
+    /** CẬP NHẬT: Tải tài nguyên và đặt độ phân giải cho canvas */
     function loadAssets() {
-        frameImage.src = 'khung.png';
-        frameImage.onload = () => { loadState(); };
-        frameImage.onerror = () => alert('Lỗi: Không tìm thấy file "khung.png".');
         watermarkImage.src = 'logo_subag.png';
         watermarkImage.onerror = () => console.warn('Cảnh báo: Không tìm thấy file logo watermark.');
+
+        frameImage.src = 'khung.png';
+        frameImage.onload = () => {
+             console.log(`Khung ảnh đã tải. Kích thước gốc: ${frameImage.width}x${frameImage.height}`);
+             
+             // Đặt độ phân giải cho canvas theo kích thước của khung ảnh
+             if (frameImage.width > 0 && frameImage.height > 0) {
+                 editorCanvas.width = frameImage.width;
+                 editorCanvas.height = frameImage.height;
+             } else {
+                 // Giá trị dự phòng nếu không đọc được kích thước khung
+                 editorCanvas.width = 1080;
+                 editorCanvas.height = 1080;
+             }
+             console.log(`Độ phân giải canvas được đặt thành: ${editorCanvas.width}x${editorCanvas.height}`);
+             
+             loadState(); // Tải phiên làm việc sau khi đã có kích thước canvas
+        }
+        frameImage.onerror = () => {
+            alert('Lỗi: Không tìm thấy file "khung.png".');
+            editorCanvas.width = 1080; // Đặt kích thước dự phòng
+            editorCanvas.height = 1080;
+            loadState();
+        };
     }
 
     function handleProductSelection() {
         const newFiles = Array.from(productInput.files);
         if (newFiles.length === 0) return;
-        
         const newItems = newFiles.map(file => ({ 
-            file: file, 
-            scale: 1, 
-            offset: { x: 0, y: 0 },
-            isFrameEnabled: true,
-            isWatermarkEnabled: false,
-            watermarkScale: 0.3, // Thêm giá trị mặc định
-            watermarkOffset: { x: 0, y: 0 } // Thêm giá trị mặc định
+            file: file, scale: 1, offset: { x: 0, y: 0 },
+            isFrameEnabled: true, isWatermarkEnabled: false,
+            watermarkScale: 0.3, watermarkOffset: { x: 0, y: 0 }
         }));
-        
         productItems = productItems.concat(newItems);
         productInput.value = "";
         redrawGallery();
@@ -161,8 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
             activeItem.watermarkScale = watermarkScale;
             activeItem.watermarkOffset = { ...watermarkOffset };
         }
-
-        if (!frameImage.complete || index < 0 || index >= productItems.length) {
+        if (index < 0 || index >= productItems.length) {
             editorArea.classList.add('hidden');
             return;
         }
@@ -173,23 +182,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const reader = new FileReader();
         reader.onload = e => currentProductImage.src = e.target.result;
         reader.readAsDataURL(currentItem.file);
-        
         currentProductImage.onload = () => {
-            // Tải thông số của ảnh
             scale = currentItem.scale;
             offset = { ...currentItem.offset };
             zoomSlider.value = scale;
-            
-            // Tải thông số của watermark
             watermarkScale = currentItem.watermarkScale;
             watermarkOffset = { ...currentItem.watermarkOffset };
             watermarkZoomSlider.value = watermarkScale;
-
-            // Cập nhật các nút gạt
             frameToggle.checked = currentItem.isFrameEnabled;
             watermarkToggle.checked = currentItem.isWatermarkEnabled;
             watermarkControls.classList.toggle('hidden', !currentItem.isWatermarkEnabled);
-
             editorArea.classList.remove('hidden');
             updateNavigation();
             redrawCanvas();
@@ -219,13 +221,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     async function processAndDownloadAll() {
         if (productItems.length === 0) { alert("Chưa có ảnh nào để tải!"); return; }
-        saveState(); // Đảm bảo trạng thái ảnh cuối cùng được lưu
+        saveState();
         downloadAllBtn.disabled = true;
         downloadAllBtn.textContent = "Đang xử lý (0%)...";
         const tempCanvas = document.createElement('canvas');
         const tempCtx = tempCanvas.getContext('2d');
-        tempCanvas.width = frameImage.width || 500;
-        tempCanvas.height = frameImage.height || 500;
+        // Sử dụng kích thước của khung ảnh thật
+        tempCanvas.width = frameImage.width || 1080;
+        tempCanvas.height = frameImage.height || 1080;
+
         for (let i = 0; i < productItems.length; i++) {
             const item = productItems[i];
             const productImg = await loadImageFromFile(item.file);
@@ -275,7 +279,6 @@ document.addEventListener('DOMContentLoaded', function() {
     resetBtn.addEventListener('click', resetWorkspace);
     prevBtn.addEventListener('click', () => { if(activeProductIndex > 0) loadIntoEditor(activeProductIndex - 1); });
     nextBtn.addEventListener('click', () => { if(activeProductIndex < productItems.length - 1) loadIntoEditor(activeProductIndex + 1); });
-    
     frameToggle.addEventListener('change', () => { if (activeProductIndex > -1) { productItems[activeProductIndex].isFrameEnabled = frameToggle.checked; redrawCanvas(); saveState(); } });
     watermarkToggle.addEventListener('change', () => { if (activeProductIndex > -1) { productItems[activeProductIndex].isWatermarkEnabled = watermarkToggle.checked; watermarkControls.classList.toggle('hidden', !watermarkToggle.checked); redrawCanvas(); saveState(); } });
     watermarkZoomSlider.addEventListener('input', () => { watermarkScale = parseFloat(watermarkZoomSlider.value); redrawCanvas(); });
